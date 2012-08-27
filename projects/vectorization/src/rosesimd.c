@@ -13,6 +13,9 @@
 
 #define USE_SSE 1
 
+/*
+  V_SgAddOp
+*/
 __SIMD _SIMD_add_ps(__SIMD a, __SIMD b)
 {
 #ifdef  USE_SSE
@@ -46,6 +49,9 @@ __SIMDi _SIMD_add_epi32(__SIMDi a, __SIMDi b)
 #endif
 }
 
+/*
+  V_SgSubtractOp
+*/
 __SIMD _SIMD_sub_ps(__SIMD a, __SIMD b)
 {
 #ifdef  USE_SSE
@@ -79,6 +85,9 @@ __SIMDi _SIMD_sub_epi32(__SIMDi a, __SIMDi b)
 #endif
 }
 
+/*
+  V_SgMultiplyOp
+*/
 __SIMD _SIMD_mul_ps(__SIMD a, __SIMD b)
 {
 #ifdef  USE_SSE
@@ -118,6 +127,9 @@ __SIMDi _SIMD_mul_epi32(__SIMDi a, __SIMDi b)
 #endif
 }
 
+/*
+  V_SgDivideOp
+*/
 __SIMD _SIMD_div_ps(__SIMD a, __SIMD b)
 {
 #ifdef  USE_SSE
@@ -150,6 +162,11 @@ __SIMDi _SIMD_div_epi32(__SIMDi a, __SIMDi b)
   return vec_div(a,b);
 #endif
 }
+*/
+
+
+/*
+  multiply-add
 */
 __SIMD _SIMD_madd_ps(__SIMD a, __SIMD b, __SIMD c)
 {
@@ -184,6 +201,9 @@ __SIMDi _SIMD_madd_epi32(__SIMDi a, __SIMDi b, __SIMDi c)
 #endif
 }
 
+/*
+  multiply-subtract
+*/
 __SIMD _SIMD_msub_ps(__SIMD a, __SIMD b, __SIMD c)
 {
 #ifdef  USE_SSE
@@ -217,6 +237,10 @@ __SIMDi _SIMD_msub_epi32(__SIMDi a, __SIMDi b, __SIMDi c)
 #endif
 }
 
+/*
+  _SIMD_splats_(ARG1)
+  Returns a vector of which the value of each element is set to ARG1.
+*/
 __SIMD _SIMD_splats_ps(float f)
 {
 #ifdef  USE_SSE
@@ -247,5 +271,110 @@ __SIMDi _SIMD_splats_epi32(int i)
   return _m256_set1_epi32(i);
 #elif defined USE_IBM
   return vec_splats(i);
+#endif
+}
+
+/*
+  V_SgAndOp
+  Integer is not supported. 
+*/
+__SIMD _SIMD_and_ps(__SIMD a, __SIMD b)
+{
+#ifdef  USE_SSE
+  return _mm_and_ps(a,b);
+#elif defined USE_AVX
+  return _m256_and_ps(a,b);
+#elif defined USE_IBM
+  return vec_and(a,b);
+#endif
+}
+
+__SIMDd _SIMD_and_pd(__SIMDd a, __SIMDd b)
+{
+#ifdef  USE_SSE
+  return _mm_and_pd(a,b);
+#elif defined USE_AVX
+  return _m256_and_ps(a,b);
+#elif defined USE_IBM
+  return vec_and(a,b);
+#endif
+}
+
+/*
+  V_SgBitOrOp
+  integer is not supported. 
+*/
+__SIMD _SIMD_or_ps(__SIMD a, __SIMD b)
+{
+#ifdef  USE_SSE
+  return _mm_or_ps(a,b);
+#elif defined USE_AVX
+  return _m256_or_ps(a,b);
+#elif defined USE_IBM
+  return vec_or(a,b);
+#endif
+}
+
+__SIMDd _SIMD_or_pd(__SIMDd a, __SIMDd b)
+{
+#ifdef  USE_SSE
+  return _mm_or_pd(a,b);
+#elif defined USE_AVX
+  return _m256_or_ps(a,b);
+#elif defined USE_IBM
+  return vec_or(a,b);
+#endif
+}
+
+/*
+  V_SgBitXorOp
+  integer is not supported. 
+ 
+  todo: need to verify the support for double-precision
+*/
+__SIMD _SIMD_xor_ps(__SIMD a, __SIMD b)
+{
+#ifdef  USE_SSE
+  return _mm_xor_ps(a,b);
+#elif defined USE_AVX
+  return _m256_xor_ps(a,b);
+#elif defined USE_IBM
+  return vec_xor(a,b);
+#endif
+}
+
+__SIMDd _SIMD_xor_pd(__SIMDd a, __SIMDd b)
+{
+#ifdef  USE_SSE
+  return _mm_xor_pd(a,b);
+#elif defined USE_AVX
+  return _m256_xor_ps(a,b);
+#elif defined USE_IBM
+  return vec_xor(a,b);
+#endif
+}
+
+/*
+  V_SgMinusOp
+*/
+__SIMD _SIMD_neg_ps(__SIMD a)
+{
+#ifdef  USE_SSE
+  return _mm_xor_ps(a, _mm_set1_ps(-0.0f));
+#elif defined USE_AVX
+  return _mm256_xor_ps(a, _mm_set1_ps(-0.0f));
+#elif defined USE_IBM
+  return vec_neg(a);
+#endif
+}
+
+__SIMDd _SIMD_neg_pd(__SIMDd a)
+{
+#ifdef  USE_SSE
+  return _mm_xor_pd(a, _mm_set1_pd(-0.0f));
+#elif defined USE_AVX
+  return _mm256_xor_pd(a, _mm_set1_pd(-0.0f));
+#elif defined USE_IBM
+  return vec_neg(a);
 #endif
 }

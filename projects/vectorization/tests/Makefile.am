@@ -6,12 +6,16 @@ DIFF=diff
 
 TESTCODES = \
       simpleArithmetic.c \
+      compoundAssignOp.c \
+      unaryOp.c \
       simpleIntegerArithmetic.c \
       multiDimensionArray.c \
 	  FMA.c
 
 COMPARE_CODES = \
       rose_simpleArithmetic.c \
+      rose_compoundAssignOp.c \
+      rose_unaryOp.c \
       rose_simpleIntegerArithmetic.c \
       rose_multiDimensionArray.c \
 	  rose_FMA.c

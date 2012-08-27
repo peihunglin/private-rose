@@ -80,6 +80,22 @@ extern __SIMD  _SIMD_splats_ps(float);
 extern __SIMDd  _SIMD_splats_pd(double);
 extern __SIMDi  _SIMD_splats_epi32(int);
 
+// and:  a = b & c  ==> a = _SIMD_and_ps(b,c)
+extern __SIMD  _SIMD_and_ps(__SIMD, __SIMD);
+extern __SIMDd _SIMD_and_pd(__SIMDd, __SIMDd);
+
+// and:  a = b | c  ==> a = _SIMD_or_ps(b,c)
+extern __SIMD  _SIMD_or_ps(__SIMD, __SIMD);
+extern __SIMDd _SIMD_or_pd(__SIMDd, __SIMDd);
+
+// and:  a = b ^ c  ==> a = _SIMD_xor_ps(b,c)
+extern __SIMD  _SIMD_xor_ps(__SIMD, __SIMD);
+extern __SIMDd _SIMD_xor_pd(__SIMDd, __SIMDd);
+
+// neg:  a = -a  ==> a = _SIMD_neg_ps(a)
+extern __SIMD  _SIMD_neg_ps(__SIMD);
+extern __SIMDd _SIMD_neg_pd(__SIMDd);
+
 #ifdef __cplusplus
 }
 #endif

@@ -69,8 +69,8 @@ void SIMDVectorization::translateBinaryOp(SgBinaryOp* binaryOp, SgScopeStatement
   ROSE_ASSERT(rhs);
   lhs->set_parent(NULL);
   rhs->set_parent(NULL);
-  SgExprListExp* vectorAddArgs = buildExprListExp(lhs, rhs);
-  SgFunctionCallExp* SIMDExp = buildFunctionCallExp(name,binaryOp->get_type(), vectorAddArgs, scope);
+  SgExprListExp* vectorArgs = buildExprListExp(lhs, rhs);
+  SgFunctionCallExp* SIMDExp = buildFunctionCallExp(name,binaryOp->get_type(), vectorArgs, scope);
   binaryOp->set_lhs_operand(NULL);
   binaryOp->set_rhs_operand(NULL);
   replaceExpression(binaryOp, SIMDExp, false);
@@ -276,6 +276,67 @@ void SIMDVectorization::translateOperand(SgExpression* operand)
   We implement translations for the basic arithmetic operator first.
 */
 /******************************************************************************************************************************/
+void SIMDVectorization::vectorizeUnaryOp(SgForStatement* forStatement)
+{
+  SgStatement* loopBody = forStatement->get_loop_body();
+  ROSE_ASSERT(loopBody);
+  SgScopeStatement* scope = loopBody->get_scope();
+  Rose_STL_Container<SgNode*> unaryOpList = NodeQuery::querySubTree (loopBody,V_SgUnaryOp);
+  for (Rose_STL_Container<SgNode*>::iterator i = unaryOpList.begin(); i != unaryOpList.end(); i++)
+  {
+    SgUnaryOp* unaryOp = isSgUnaryOp(*i);
+    ROSE_ASSERT(unaryOp);
+
+    string suffix = getSIMDOpSuffix(unaryOp->get_type());
+
+    switch(unaryOp->variantT())
+    {
+      case V_SgMinusOp:
+        {
+          SgExpression* operand = unaryOp->get_operand_i();
+          SgExprListExp* vectorArgs = buildExprListExp(operand);
+          SgFunctionCallExp* SIMDExp = buildFunctionCallExp("_SIMD_neg"+suffix, unaryOp->get_type(), vectorArgs, scope);
+          unaryOp->set_operand(NULL);
+          replaceExpression(unaryOp, SIMDExp, false);
+          translateOperand(operand);  
+        }
+        break;
+      case V_SgUnaryAddOp:
+        // We should be able to remove the "+".
+        {
+          SgExpression* operand = unaryOp->get_operand_i();
+          unaryOp->set_operand(NULL);
+          replaceExpression(unaryOp, operand, false);
+          translateOperand(operand);  
+        }
+        break;
+      case V_SgMinusMinusOp:
+      case V_SgPlusPlusOp:
+        break;
+      case V_SgNotOp:
+      case V_SgAddressOfOp:
+      case V_SgBitComplementOp:
+      case V_SgCastExp:
+      case V_SgConjugateOp:
+      case V_SgExpressionRoot:
+      case V_SgPointerDerefExp:
+      case V_SgRealPartOp:
+      case V_SgThrowOp:
+      case V_SgUserDefinedUnaryOp:
+      default:
+        {
+          cerr<<"warning, unhandled unaryOp: "<< unaryOp->class_name()<<endl;
+        }
+    }
+  }
+}
+
+/******************************************************************************************************************************/
+/*
+  Search for all the binary operations in the loop body and translate them into SIMD function calls.
+  We implement translations for the basic arithmetic operator first.
+*/
+/******************************************************************************************************************************/
 void SIMDVectorization::vectorizeBinaryOp(SgForStatement* forStatement)
 {
   SgStatement* loopBody = forStatement->get_loop_body();
@@ -317,24 +378,36 @@ void SIMDVectorization::vectorizeBinaryOp(SgForStatement* forStatement)
           translateOperand(binaryOp->get_rhs_operand()); 
         }
         break;
-      case V_SgAndOp:
       case V_SgBitAndOp:
+        {
+          translateBinaryOp(binaryOp, scope, "_SIMD_and"+suffix);
+        }
+        break;
       case V_SgBitOrOp:
+        {
+          translateBinaryOp(binaryOp, scope, "_SIMD_or"+suffix);
+        }
+        break;
       case V_SgBitXorOp:
+        {
+          translateBinaryOp(binaryOp, scope, "_SIMD_xor"+suffix);
+        }
       case V_SgEqualityOp:
       case V_SgGreaterOrEqualOp:
       case V_SgGreaterThanOp:
-      case V_SgExponentiationOp:
-      case V_SgNotOp:
       case V_SgLessOrEqualOp:
       case V_SgLessThanOp:
       case V_SgNotEqualOp:
+      case V_SgCompoundAssignOp:
         {
           cout << "support for " << binaryOp->class_name() << " is under construction" << endl;
         }
         break;
       case V_SgPntrArrRefExp:
+        // This is known to be translated differently.  We remove it from the warning list.
         break;
+      case V_SgAndOp:
+      case V_SgExponentiationOp:
       default:
         {
           cerr<<"warning, unhandled binaryOp: "<< binaryOp->class_name()<<endl;

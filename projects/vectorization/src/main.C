@@ -62,6 +62,7 @@ void transformTraversal::visit(SgNode* n)
         if(isInnermostLoop(forStatement) && isStrideOneLoop(forStatement)){
           //stripmineLoop(forStatement,4);
           updateLoopIteration(forStatement,VF);
+          normalizeCompoundAssignOp(forStatement);
         }
       }
       break;
@@ -88,6 +89,7 @@ void vectorizeTraversal::visit(SgNode* n)
 //          getUseList(defuse, forStatement->get_loop_body());
           translateMultiplyAccumulateOperation(forStatement);
           vectorizeBinaryOp(forStatement);
+          vectorizeUnaryOp(forStatement);
         }
       }
       break;
@@ -205,7 +207,7 @@ int main( int argc, char * argv[] )
   SgProject* project = frontend(newArgc,newArgv);
   AstTests::runAllTests(project);   
 
-  //generateAstGraph(project,8000,"_orig");
+  generateAstGraph(project,8000,"_orig");
 /* Generate data dependence graph
   ArrayAnnotation* annot = ArrayAnnotation::get_inst(); 
   ArrayInterface array_interface(*annot);
@@ -251,7 +253,7 @@ int main( int argc, char * argv[] )
   vectorizeTraversal doVectorization;
   doVectorization.traverseInputFiles(project,postorder);
 
-  //generateAstGraph(project,80000);
+  generateAstGraph(project,80000);
 
   //generateDOT(*project);
  

@@ -15,6 +15,8 @@ namespace SIMDVectorization
   void stripmineLoop(SgForStatement*, int);
 //  Perform strip-mining transformation on a vectorizable loop, update its loop stride.
   void updateLoopIteration(SgForStatement*, int);
+//  vectorize the innermost loop by translating unary operations into SIMD intrinsic function calls
+  void vectorizeUnaryOp(SgForStatement*);
 //  vectorize the innermost loop by translating binary operations into SIMD intrinsic function calls
   void vectorizeBinaryOp(SgForStatement*);
 //  translate the binary operator to SIMD intrisic functions

@@ -28,7 +28,7 @@ int main()
     a_SIMD[i_nom_1_strip_11] = _SIMD_madd_ps(a_SIMD[i_nom_1_strip_11],b_SIMD[i_nom_1_strip_11],c_SIMD[i_nom_1_strip_11]);
     a_SIMD[i_nom_1_strip_11] = _SIMD_msub_ps(a_SIMD[i_nom_1_strip_11],b_SIMD[i_nom_1_strip_11],c_SIMD[i_nom_1_strip_11]);
     a_SIMD[i_nom_1_strip_11] = _SIMD_madd_ps(a_SIMD[i_nom_1_strip_11],b_SIMD[i_nom_1_strip_11],c_SIMD[i_nom_1_strip_11]);
-    a_SIMD[i_nom_1_strip_11] = -_SIMD_msub_ps(a_SIMD[i_nom_1_strip_11],b_SIMD[i_nom_1_strip_11],c_SIMD[i_nom_1_strip_11]);
+    a_SIMD[i_nom_1_strip_11] = _SIMD_neg_ps(_SIMD_msub_ps(a_SIMD[i_nom_1_strip_11],b_SIMD[i_nom_1_strip_11],c_SIMD[i_nom_1_strip_11]));
     cs_SIMD = _SIMD_madd_ps(as_SIMD,bs_SIMD,_SIMD_splats_ps(1));
   }
   return 0;
