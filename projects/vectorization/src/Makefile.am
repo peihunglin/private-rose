@@ -1,4 +1,3 @@
-
 include $(top_srcdir)/config/Makefile.for.ROSE.includes.and.libs
 
 ## Place generated object files (.o) into the same directory as their source
@@ -9,25 +8,29 @@ AUTOMAKE_OPTIONS = subdir-objects
 #  vectorization
 # ------------------------------------------------------------------------------
 
-#exec_prefix=${prefix}/vectorization
-Vectorization_includedir=$(exec_prefix)
-INCLUDES = $(ROSE_INCLUDES) -I$(Vectorization_includedir)
-LDADD    = $(ROSE_LIBS)
-lib_LIBRARIES = libsimd.a
-bin_PROGRAMS = vectorization
-include_HEADERS = rose_simd.h
+vectorization_API_VERSION=1.0.0
+exec_prefix=${prefix}/vectorization-$(vectorization_API_VERSION)
 
-libsimd_a_SOURCES = rosesimd.c 
+INCLUDES = $(ROSE_INCLUDES)
+LDADD    = $(ROSE_LIBS)
+
+bin_PROGRAMS = vectorization
 
 vectorization_SOURCES=\
+	SIMDAnalysis.C \
 	main.C \
 	normalization.C \
-	SIMDAnalysis.C \
-	vectorization.C 
+	vectorization.C
 
-Vectorization_include_HEADERS=\
-  normalization.h \
-  SIMDAnalysis.h \
-  vectorization.h
+vectorization_includedir = ${exec_prefix}/include/vectorization
+vectorization_include_HEADERS=\
+	SIMDAnalysis.h \
+	normalization.h \
+	rose_simd.h \
+	vectorization.h
 
-  
+# -msse and -msse2 are enabled for x86-64 compiler by default.
+# they have to be enabled on i386 - i686 compilers.
+libsimd_la_CPPFLAGS = -msse -msse2
+lib_LTLIBRARIES = libsimd.la
+libsimd_la_SOURCES = rosesimd.c

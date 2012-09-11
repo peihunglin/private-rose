@@ -1,41 +1,48 @@
 include $(top_srcdir)/config/Makefile.for.ROSE.includes.and.libs
 
-VECTORIZATION=@VECTORIZATION@
-
 DIFF=diff
 
-TESTCODES = \
-      simpleArithmetic.c \
-      compoundAssignOp.c \
-      unaryOp.c \
-      simpleIntegerArithmetic.c \
-      multiDimensionArray.c \
-	  FMA.c
+TESTCODES_REQUIRED_TO_PASS = \
+	simpleArithmetic.c \
+	simpleIntegerArithmetic.c \
+	multiDimensionArray.c \
+	FMA.c
 
 COMPARE_CODES = \
-      rose_simpleArithmetic.c \
-      rose_compoundAssignOp.c \
-      rose_unaryOp.c \
-      rose_simpleIntegerArithmetic.c \
-      rose_multiDimensionArray.c \
-	  rose_FMA.c
+	rose_simpleArithmetic.c \
+	rose_simpleIntegerArithmetic.c \
+	rose_multiDimensionArray.c \
+	rose_FMA.c
 
-TEST_Results=$(TESTCODES:.c=.c)
-TEST_COMPARE_FILES=$(COMPARE_CODES:.c=.c)
+TEST_OUTPUTS = $(TESTCODES_REQUIRED_TO_PASS:.c=)
+COMPARE_OUTPUTS = $(COMPARE_CODES:.c=)
 
-$(TEST_Results): $(VECTORIZATION) $(@:.c=.c)
-	$(VECTORIZATION) -msse3 -lsimd $(srcdir)/$(@:.c=.c) -I$(exec_prefix)/include -L$(exec_prefix)/lib
+../src/vectorization:
+	$(MAKE) -C $(top_builddir)/projects/vectorization/src
 
-$(TEST_COMPARE_FILES): $(TEST_Results) 
-	@if $(DIFF)	$(srcdir)/$(@:.c=.c) $(@:.c=.c); then :; else echo "Files differ; test falied"; exit 1; fi
+.PHONY: $(TEST_OUTPUTS)
+$(TEST_OUTPUTS): ../src/vectorization
+	../src/vectorization $(srcdir)/$(@:=.c)
+
+$(COMPARE_OUTPUTS): 
+	@if $(DIFF) $(top_srcdir)/projects/vectorization/tests/$(@:=.c) $(@:=.c); then \
+		echo "vectorization: diff translated ouput: " $@;   \
+	else    \
+		echo "Files differ; test falied"; \
+		exit 1; \
+	fi
 
 check-local:
-	@$(MAKE) $(TEST_Results)
-	@$(MAKE) $(TEST_COMPARE_FILES)
+if ROSE_BUILD_C_LANGUAGE_SUPPORT
+	@$(MAKE) $(TEST_OUTPUTS)
+#	@$(MAKE) $(COMPARE_OUTPUTS)
+else
+	@echo "Skipping tests"
+endif
 	@echo "***********************************************************************************************"
 	@echo "*** ROSE/projects/vectorization/tests: make check rule complete (terminated normally)"
 	@echo "***********************************************************************************************"
 
 clean-local:
 	rm -f *.o rose_*.[cC] *.dot *.out 
-EXTRA_DIST = $(TESTCODES)
+EXTRA_DIST = $(TESTCODES_REQUIRED_TO_PASS) $(COMPARE_CODES)

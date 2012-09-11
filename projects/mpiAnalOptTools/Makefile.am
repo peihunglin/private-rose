@@ -1,13 +1,12 @@
 include $(top_srcdir)/config/Makefile.for.ROSE.includes.and.libs
 
-SUBDIRS=\
-	src \
-	tests
+if ROSE_WITH_MPI_C
 
-EXTRA_DIST=\
-	README
+SUBDIRS = mpiToGOAL
+
+endif
 
 check-local:
 	@echo "***********************************************************************************************"
-	@echo "*** ROSE/projects/vectorization: make check rule complete (terminated normally)"
+	@echo "*** ROSE/projects/mpiAnalOptTools: make check rule complete (terminated normally) ***"
 	@echo "***********************************************************************************************"
