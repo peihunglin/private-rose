@@ -85,11 +85,14 @@ void vectorizeTraversal::visit(SgNode* n)
       {
         SgForStatement* forStatement = isSgForStatement(n);
         if(isInnermostLoop(forStatement)){
+          SgStatement* loopBody = forStatement->get_loop_body();
+          ROSE_ASSERT(loopBody);
 //          getDefList(defuse, forStatement->get_loop_body());
 //          getUseList(defuse, forStatement->get_loop_body());
-          translateMultiplyAccumulateOperation(forStatement);
-          vectorizeBinaryOp(forStatement);
-          vectorizeUnaryOp(forStatement);
+          translateMultiplyAccumulateOperation(loopBody);
+          vectorizeBinaryOp(loopBody);
+          vectorizeUnaryOp(loopBody);
+          vectorizeConditionalStmt(loopBody);
         }
       }
       break;
@@ -206,8 +209,8 @@ int main( int argc, char * argv[] )
 // Build the AST used by ROSE
   SgProject* project = frontend(newArgc,newArgv);
   AstTests::runAllTests(project);   
-
-  generateAstGraph(project,8000,"_orig");
+  if (SgProject::get_verbose() > 2)
+    generateAstGraph(project,8000,"_orig");
 /* Generate data dependence graph
   ArrayAnnotation* annot = ArrayAnnotation::get_inst(); 
   ArrayInterface array_interface(*annot);
@@ -253,7 +256,8 @@ int main( int argc, char * argv[] )
   vectorizeTraversal doVectorization;
   doVectorization.traverseInputFiles(project,postorder);
 
-  generateAstGraph(project,80000);
+  if (SgProject::get_verbose() > 2)
+    generateAstGraph(project,80000);
 
   //generateDOT(*project);
  

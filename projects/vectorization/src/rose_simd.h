@@ -97,6 +97,34 @@ extern __SIMDd _SIMD_xor_pd(__SIMDd, __SIMDd);
 extern __SIMD  _SIMD_neg_ps(__SIMD);
 extern __SIMDd _SIMD_neg_pd(__SIMDd);
 
+// SIMD select
+extern __SIMD  _SIMD_sel_ps(__SIMD, __SIMD, void**);
+extern __SIMDd  _SIMD_sel_pd(__SIMDd, __SIMDd, void**);
+
+// SIMD cmpeq
+extern void  _SIMD_cmpeq_ps(__SIMD, __SIMD, void**);
+extern void  _SIMD_cmpeq_pd(__SIMDd, __SIMDd, void**);
+
+// SIMD cmpne
+extern void  _SIMD_cmpne_ps(__SIMD, __SIMD, void**);
+extern void  _SIMD_cmpne_pd(__SIMDd, __SIMDd, void**);
+
+// SIMD cmplt
+extern void  _SIMD_cmplt_ps(__SIMD, __SIMD, void**);
+extern void  _SIMD_cmplt_pd(__SIMDd, __SIMDd, void**);
+
+// SIMD cmple
+extern void  _SIMD_cmple_ps(__SIMD, __SIMD, void**);
+extern void  _SIMD_cmple_pd(__SIMDd, __SIMDd, void**);
+
+// SIMD cmpgt
+extern void  _SIMD_cmpgt_ps(__SIMD, __SIMD, void**);
+extern void  _SIMD_cmpgt_pd(__SIMDd, __SIMDd, void**);
+
+// SIMD cmpge
+extern void  _SIMD_cmpge_ps(__SIMD, __SIMD, void**);
+extern void  _SIMD_cmpge_pd(__SIMDd, __SIMDd, void**);
+
 #ifdef __cplusplus
 }
 #endif
