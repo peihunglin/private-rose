@@ -975,6 +975,12 @@ fi
 # Call supporting macro for Haskell
 ROSE_SUPPORT_HASKELL
 
+# Call supporting macro for SWI Prolog
+ROSE_SUPPORT_SWIPL
+
+# Call supporting macro for minitermite
+ROSE_CONFIGURE_MINITERMITE
+
 # Call supporting macro for bddbddb
 ROSE_SUPPORT_BDDBDDB
 
@@ -1877,6 +1883,7 @@ stamp-h
 Makefile
 rose.docs
 config/Makefile
+config/include-staging/Makefile
 src/Makefile
 src/util/Makefile
 src/util/stringSupport/Makefile
@@ -2161,6 +2168,9 @@ projects/RTC/Makefile
 projects/PowerAwareCompiler/Makefile
 projects/ManyCoreRuntime/Makefile
 projects/ManyCoreRuntime/docs/Makefile
+projects/minitermite/Makefile
+projects/minitermite/Doxyfile
+projects/minitermite/src/minitermite/minitermite.h
 projects/mint/Makefile
 projects/mint/src/Makefile
 projects/mint/tests/Makefile
@@ -2366,10 +2376,26 @@ projects/compass2/docs/doxygen/doxygen.config
 projects/compass2/docs/doxygen/Makefile
 projects/compass2/tests/Makefile
 projects/compass2/tests/checkers/Makefile
+projects/compass2/tests/checkers/dead_function/Makefile
+projects/compass2/tests/checkers/dead_function/compass_parameters.xml
+projects/compass2/tests/checkers/default_argument/Makefile
+projects/compass2/tests/checkers/default_argument/compass_parameters.xml
 projects/compass2/tests/checkers/function_pointer/Makefile
 projects/compass2/tests/checkers/function_pointer/compass_parameters.xml
+projects/compass2/tests/checkers/function_prototype/Makefile
+projects/compass2/tests/checkers/function_prototype/compass_parameters.xml
+projects/compass2/tests/checkers/function_with_multiple_returns/Makefile
+projects/compass2/tests/checkers/function_with_multiple_returns/compass_parameters.xml
+projects/compass2/tests/checkers/global_variables/Makefile
+projects/compass2/tests/checkers/global_variables/compass_parameters.xml
 projects/compass2/tests/checkers/keyword_macro/Makefile
 projects/compass2/tests/checkers/keyword_macro/compass_parameters.xml
+projects/compass2/tests/checkers/non_global_cpp_directive/Makefile
+projects/compass2/tests/checkers/non_global_cpp_directive/compass_parameters.xml
+projects/compass2/tests/checkers/non_static_array_size/Makefile
+projects/compass2/tests/checkers/non_static_array_size/compass_parameters.xml
+projects/compass2/tests/checkers/variable_name_similarity/Makefile
+projects/compass2/tests/checkers/variable_name_similarity/compass_parameters.xml
 projects/compass2/tests/core/Makefile
 projects/compass2/tests/core/compass_parameters.xml
 ])
