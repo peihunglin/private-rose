@@ -8,6 +8,21 @@ using namespace SageBuilder;
 using namespace Fortran_to_C;
 
 
+
+void Fortran_to_C::translateExponentiationOp(SgExponentiationOp* expOp)
+{
+  SgScopeStatement* scope = getScope(expOp);
+  SgExpression* operand1 = expOp->get_lhs_operand();
+  ROSE_ASSERT(operand1); 
+  SgExpression* operand2 = expOp->get_rhs_operand();
+  ROSE_ASSERT(operand2); 
+
+  insertSystemHeader("math.h",scope);
+  SgExprListExp* exprListExp = buildExprListExp(deepCopy(operand1), deepCopy(operand2));
+  SgFunctionCallExp* powerFunctionCall = buildFunctionCallExp("pow", expOp->get_type(), exprListExp, scope);
+  replaceExpression(expOp,powerFunctionCall,false);
+}
+
 void Fortran_to_C::translateImplicitFunctionCallExp(SgFunctionCallExp* funcCallExp)
 {
   SgScopeStatement* scope = getScope(funcCallExp);
