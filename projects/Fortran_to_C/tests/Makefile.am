@@ -14,6 +14,7 @@ TESTCODES_REQUIRED_TO_PASS = \
 							   array2.F \
 							   array3.F \
 							   array4.F \
+							   array5.F \
 							   declarationList.F \
 							   dimension1.F \
 							   dimension2.F \
@@ -24,6 +25,7 @@ TESTCODES_REQUIRED_TO_PASS = \
 							   equivalence5.F \
 							   equivalence6.F \
 							   equivalence7.F \
+							   equivalence8.F \
 							   program1.F \
 							   subroutine1.F \
 							   implicitFunctionCall1.F \
@@ -31,11 +33,13 @@ TESTCODES_REQUIRED_TO_PASS = \
 							   power.F \
 							   functionArgs1.F \
 							   functionArgs2.F \
+							   functionArgs3.F \
 							   label.F \
 							   loopWithLabel.F \
 							   parameter1.F \
 							   parameter2.F \
 							   parameter3.F \
+							   type.F \
 							   function1.F
 
 

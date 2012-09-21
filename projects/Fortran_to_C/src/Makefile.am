@@ -20,6 +20,7 @@ Fortran_to_C_SOURCES=\
 	main.C \
 	f2c/f2cExpression.C \
 	f2c/f2cStatement.C \
+	f2c/f2cType.C \
 	f2c/f2cArray.C 
 
 Fortran_to_C_include_HEADERS = f2c.h

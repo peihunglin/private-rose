@@ -57,6 +57,7 @@ namespace Fortran_to_C
     void translateFileName(SgFile*);
     void translateProgramHeaderStatement(SgProgramHeaderStatement*);
     void translateProcedureHeaderStatement(SgProcedureHeaderStatement*);
+    void updateVariableDeclarationList(SgVariableDeclaration*);
     void translateAttributeSpecificationStatement(SgAttributeSpecificationStatement*);
     void translateCommonBlock(SgCommonBlock*);
     void translateFunctionParameterList(SgFunctionParameterList*, SgFunctionParameterList*, SgFunctionDefinition*);
@@ -77,6 +78,7 @@ namespace Fortran_to_C
     bool isMaxMinFunctionName(SgName, SgType*);
     void removeFortranMaxMinFunction(SgGlobal*);
 
+    SgType* translateType(SgType*);
 
     SgExpression* getFortranDimensionSize(SgExpression*);
     SgExpression* get0basedIndex(SgExpression*, SgExpression*);
