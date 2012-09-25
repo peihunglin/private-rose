@@ -156,6 +156,13 @@ void f2cTraversal::visit(SgNode* n)
         translateExponentiationOp(expOp);
         break;
       }
+    case V_SgFloatVal:
+      {
+        SgFloatVal* floatVal = isSgFloatVal(n);
+        ROSE_ASSERT(floatVal);
+        translateDoubleVal(floatVal);
+        break;
+      }
     case V_SgCommonBlock:
       {
         SgCommonBlock* commonBlock = isSgCommonBlock(n);

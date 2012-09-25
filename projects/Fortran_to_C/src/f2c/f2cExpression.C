@@ -8,6 +8,24 @@ using namespace SageBuilder;
 using namespace Fortran_to_C;
 
 
+void Fortran_to_C::translateDoubleVal(SgFloatVal* floatVal)
+{
+  string valString = floatVal->get_valueString();
+  if(valString.find('d',0) != string::npos)
+  {
+    replace(valString.begin(),valString.end(),'d','e');
+    SgDoubleVal* doubleVal = buildDoubleVal(atof(valString.c_str()));
+    doubleVal->set_valueString(valString);
+    replaceExpression(floatVal, doubleVal, false);
+  }
+  else if(valString.find('D',0) != string::npos)
+  {
+    replace(valString.begin(),valString.end(),'D','E');
+    SgDoubleVal* doubleVal = buildDoubleVal(atof(valString.c_str()));
+    doubleVal->set_valueString(valString);
+    replaceExpression(floatVal, doubleVal, false);
+  }
+}
 
 void Fortran_to_C::translateExponentiationOp(SgExponentiationOp* expOp)
 {
