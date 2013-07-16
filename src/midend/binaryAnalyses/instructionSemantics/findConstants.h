@@ -368,7 +368,7 @@ struct UnaryConstraint: public Constraint {
                 if (le1.isTop) {result->set(LatticeElement<(OutLen)>()); return;}                                              \
                 Formula                                                                                                        \
             }                                                                                                                  \
-            virtual uint64_t compute(uint64_t) const {abort();}                                                                \
+            virtual uint64_t compute(uint64_t) const {abort(); return 0;}                                                                \
         };                                                                                                                     \
         (new IC(result, a))->activate();                                                                                       \
         return result;                                                                                                         \
@@ -1091,7 +1091,7 @@ struct FindConstantsPolicy {
             }
             if (isAsmBranch(insnx)) {
                 uint64_t addr = 0;
-                bool knownTarget = getAsmKnownBranchTarget(insnx, addr);
+                bool knownTarget = insnx->get_branch_target(&addr);
                 if (knownTarget) {
                     succs.push_back(addr);
                 }
